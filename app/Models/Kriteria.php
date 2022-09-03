@@ -18,4 +18,12 @@ class Kriteria extends Model
     {
         return $this->hasMany('App\Models\Alternatif', 'id_kriteria');
     }
+    public function normalisasi()
+    {
+        return $this->hasMany('App\Models\Normalisasi', 'id_kriteria');
+    }
+    public function terbobot()
+    {
+        return $this->hasMany('App\Models\Terbobot', 'id_kriteria');
+    }
 }

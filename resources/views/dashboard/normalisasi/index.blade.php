@@ -18,24 +18,21 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($normalisasi as $n)
+          @foreach ($warga as $w)
           <tr>
             <th scope="row">{{ $no++ }}</th>
             <td>
-              {{ $n->warga->name }}
+              {{ $w->nama_warga }}
             </td>
-            @foreach ($kriteria as $k)
-            <td>
-              <?php 
-                $id = 'c'.$k->id;
-              ?>
-              {{ $n->$id }}
-            </td>
-            @endforeach
+              @foreach ($w->normalisasi as $nor)
+              <td>
+                {{ $nor->nilai_normalisasi }}
+              </td>
+              @endforeach
           </tr>
           @endforeach
         </tbody>
       </table>
 </div>
-{{ $normalisasi->links() }}
+{{ $warga->links() }}
 @endsection

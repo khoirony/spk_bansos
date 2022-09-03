@@ -14,4 +14,8 @@ class Normalisasi extends Model
     {
         return $this->belongsTo('App\Models\Warga', 'id_warga');
     }
+    public function kriteria()
+    {
+        return $this->belongsTo('App\Models\Kriteria', 'id_kriteria');
+    }
 }

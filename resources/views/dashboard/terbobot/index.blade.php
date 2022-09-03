@@ -13,29 +13,26 @@
             <th scope="col">No</th>
             <th scope="col">Nama</th>
             @foreach ($kriteria as $k)
-              <th scope="col">{{ $k->name }}</th>
+              <th scope="col">{{ $k->nama_kriteria }}</th>
             @endforeach
           </tr>
         </thead>
         <tbody>
-          @foreach ($terbobot as $t)
+          @foreach ($warga as $w)
           <tr>
             <th scope="row">{{ $no++ }}</th>
             <td>
-              {{ $t->warga->name }}
+              {{ $w->nama_warga }}
             </td>
-            @foreach ($kriteria as $k)
-            <td>
-              <?php 
-                $id = 'c'.$k->id;
-              ?>
-              {{ $t->$id }}
-            </td>
-            @endforeach
+              @foreach ($w->terbobot as $ter)
+              <td>
+                {{ $ter->nilai_terbobot }}
+              </td>
+              @endforeach
           </tr>
           @endforeach
         </tbody>
       </table>
 </div>
-{{ $terbobot->links() }}
+{{ $warga->links() }}
 @endsection

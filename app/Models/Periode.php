@@ -11,6 +11,14 @@ class Periode extends Model
     protected $guarded = ['id'];
     public function alternatif() 
 	{
-		return $this->hasMany('App\Models\Periode', 'id_periode');
+		return $this->hasMany('App\Models\Alternatif', 'id_periode');
+	}
+    public function normalisasi() 
+	{
+		return $this->hasMany('App\Models\Normalisasi', 'id_periode');
+	}
+    public function terbobot() 
+	{
+		return $this->hasMany('App\Models\Terbobot', 'id_periode');
 	}
 }

@@ -34,7 +34,7 @@
                     @if($cekalternatif == 0)
                     <input class="form-check-input" type="radio" name="nilai_alternatif{{ $k->id }}" id="nilai_alternatif{{ $k->id }}" value="{{ $sub->bobot_sub_kriteria }}">
                     @else
-                        <input class="form-check-input" type="radio" name="nilai_alternatif{{ $k->id }}" id="nilai_alternatif{{ $k->id }}" value="{{ $sub->bobot_sub_kriteria }}" {{ ($k->nilai_alternatif === $sub->bobot_sub_kriteria) ? 'checked' : '' }}>
+                        <input class="form-check-input" type="radio" name="nilai_alternatif{{ $k->id }}" id="nilai_alternatif{{ $k->id }}" value="{{ $sub->bobot_sub_kriteria }}" @if($k->nilai_alternatif == $sub->bobot_sub_kriteria) checked @endif>
                     @endif
                     <label class="form-check-label me-3" for="nilai_alternatif{{ $k->id }}">
                         <b>{{ $sub->bobot_sub_kriteria }}.</b> {{ $sub->nama_sub_kriteria }}

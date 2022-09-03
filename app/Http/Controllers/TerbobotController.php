@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Terbobot;
+use App\Models\Warga;
 use App\Models\Kriteria;
+use App\Models\Periode;
 
 class TerbobotController extends Controller
 {
@@ -15,12 +16,13 @@ class TerbobotController extends Controller
             $periode =  date("Y-m");
         }
 
-        $terbobot   = Terbobot::where('periode', $periode)->paginate(10);
+        $cariperiode = Periode::where('periode', $periode)->first();
+        $warga = Warga::paginate(10);
         $kriteria   = Kriteria::all();
         return view('dashboard.terbobot.index', [
             'title' => 'Normalisasi Terbobot',
             'active' => 'terbobot',
-            'terbobot' => $terbobot,
+            'warga' => $warga,
             'kriteria' => $kriteria,
             'periode' => $periode,
             'no' => 1

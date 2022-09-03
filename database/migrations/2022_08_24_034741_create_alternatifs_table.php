@@ -18,7 +18,7 @@ class CreateAlternatifsTable extends Migration
             $table->foreignId('id_warga')->unsigned();
             $table->foreignId('id_kriteria')->unsigned();
             $table->foreignId('id_periode')->unsigned();
-            $table->integer('nilai_alternatif')->nullable();
+            $table->double('nilai_alternatif', 15, 8)->nullable();
             $table->timestamps();
 
             $table->foreign('id_warga')->references('id')->on('wargas');

@@ -18,7 +18,7 @@ class CreateTerbobotsTable extends Migration
             $table->foreignId('id_warga')->unsigned();
             $table->foreignId('id_kriteria')->unsigned();
             $table->foreignId('id_periode')->unsigned();
-            $table->double('nilai_normalisasi', 15, 8)->nullable();
+            $table->double('nilai_terbobot', 15, 8)->nullable();
             $table->timestamps();
 
             $table->foreign('id_warga')->references('id')->on('wargas');
