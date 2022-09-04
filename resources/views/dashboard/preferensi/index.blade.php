@@ -36,20 +36,24 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($preferensi as $p)
-            <tr>
-              <th scope="row">{{ $p->warga->name }}</th>
-              <td>
-                {{ $p->warga->alamat }}
-              </td>
-              <td>
-                {{ $p->nilai }}
-              </td>
-              <td>
-                {{ $p->rangking }}
-              </td>
-            </tr>
-            @endforeach
+      @foreach ($warga as $w)
+      <tr>
+        <td>
+          {{ $w->nama_warga }}
+        </td>
+        <td>
+          {{ $w->alamat_warga }}
+        </td>
+          @foreach ($w->preferensi as $pre)
+          <td>
+            {{ $pre->nilai_preferensi }}
+          </td>
+          <td>
+            {{ $pre->peringkat }}
+          </td>
+          @endforeach
+      </tr>
+      @endforeach
     </tbody>
 </table>
 </div>

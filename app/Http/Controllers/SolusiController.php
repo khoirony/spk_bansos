@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Positifnegatif;
 use App\Models\Dpositif;
 use App\Models\Dnegatif;
-use App\Models\Kriteria;
+use App\Models\Periode;
+use App\Models\Warga;
 
 class SolusiController extends Controller
 {
@@ -17,19 +17,15 @@ class SolusiController extends Controller
             $periode =  date("Y-m");
         }
 
-        $positifnegatif = Positifnegatif::where('periode', $periode)->get();
-        $dpositif = Dpositif::where('periode', $periode)->paginate(10);
-        $dnegatif = Dnegatif::where('periode', $periode)->paginate(10);
-        $kriteria   = Kriteria::all();
+        $cariperiode = Periode::where('periode', $periode)->first();
+        $warga = Warga::paginate(10);
         return view('dashboard.solusi.index', [
             'title' => 'Solusi Ideal Positif dan Negatif',
             'active' => 'solusi',
-            'positifnegatif' => $positifnegatif,
-            'dpositif' => $dpositif,
-            'dnegatif' => $dnegatif,
-            'kriteria' => $kriteria,
+            'warga' => $warga,
             'periode' => $periode,
-            'no' => 1
+            'no_dp' => 1,
+            'no_dn' => 1
         ]);
     }
 }

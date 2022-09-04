@@ -7,78 +7,62 @@
 </div>
 
 <div class="container-fluid">
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th scope="col">+-</th>
-                @foreach ($kriteria as $k)
-                  <th scope="col">{{ $k->name }}</th>
-                @endforeach
-            </tr>
-        </thead>
-        <tbody>
-          @foreach ($positifnegatif as $p)
-          <tr>
-            <td>
-              {{ $p->name }}
-            </td>
-            @foreach ($kriteria as $k)
-            <td>
-              <?php 
-                $id = 'c'.$k->id;
-              ?>
-              {{ $p->$id }}
-            </td>
-            @endforeach
-          </tr>
-          @endforeach
-        </tbody>
-    </table><br>
-
     <div class="row">
       <div class="col">
         <h3>D+</h3>
         <table class="table table-striped table-hover">
           <thead>
               <tr>
-                  <th scope="col">Nama</th>
-                  <th scope="col">Nilai</th>
+                <th scope="col">No</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Nilai</th>
               </tr>
           </thead>
           <tbody>
-            @foreach ($dpositif as $dp)
+            @foreach ($warga as $w)
             <tr>
-              <th scope="row">{{ $dp->warga->name }}</th>
+              <th scope="row">{{ $no_dp++ }}</th>
               <td>
-                {{ $dp->nilai }}
+                {{ $w->nama_warga }}
               </td>
+                @foreach ($w->dpositif as $alt)
+                <td>
+                  {{ $alt->nilai_dpositif }}
+                </td>
+                @endforeach
             </tr>
             @endforeach
           </tbody>
         </table>
-        {{ $dpositif->links() }}
+        {{ $warga->links() }}
       </div>
       <div class="col">
         <h3>D-</h3>
         <table class="table table-striped table-hover">
           <thead>
               <tr>
-                  <th scope="col">Alternatif</th>
-                  <th scope="col">Nilai</th>
+                <th scope="col">No</th>
+                <th scope="col">Alternatif</th>
+                <th scope="col">Nilai</th>
               </tr>
           </thead>
           <tbody>
-            @foreach ($dnegatif as $dn)
+            @foreach ($warga as $w)
             <tr>
-              <th scope="row">{{ $dn->warga->name }}</th>
+              <th scope="row">{{ $no_dn++ }}</th>
               <td>
-                {{ $dn->nilai }}
+                {{ $w->nama_warga }}
               </td>
+                @foreach ($w->dnegatif as $alt)
+                <td>
+                  {{ $alt->nilai_dnegatif }}
+                </td>
+                @endforeach
             </tr>
             @endforeach
           </tbody>
         </table>
-        {{ $dnegatif->links() }}
+        {{ $warga->links() }}
       </div>
     </div>
 

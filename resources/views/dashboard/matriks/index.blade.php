@@ -19,20 +19,23 @@
         </thead>
         <tbody>
           @foreach ($warga as $w)
+          {{ $w->matriks }}
           <tr>
             <th scope="row">{{ $no++ }}</th>
             <td>
               {{ $w->nama_warga }}
             </td>
-              @foreach ($w->alternatif as $alt)
+            
+              {{-- @foreach ($w->matriks as $alt)
               <td>
-                {{ $alt->nilai_alternatif }}
+                {{ $alt }}
               </td>
-              @endforeach
+              @endforeach --}}
           </tr>
+          
           @endforeach
         </tbody>
       </table>
 </div>
-{{ $warga->links() }}
+{{-- {{ $warga->links() }} --}}
 @endsection

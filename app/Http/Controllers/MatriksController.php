@@ -17,15 +17,14 @@ class MatriksController extends Controller
             $periode =  date("Y-m");
         }
 
-        // $warga = Warga::join('alternatifs', 'alternatifs.id_warga', '=', 'wargas.id')->get();
-        // $matriks   = Alternatif::where('id_periode', $cariperiode->id)->paginate(10);
         $cariperiode = Periode::where('periode', $periode)->first();
-        $warga = Warga::paginate(10);
+        $matriks = Warga::join('alternatifs', 'wargas.id', '=', 'alternatifs.id_warga')->where('id_periode', $cariperiode->id)->get(['wargas.id','wargas.nama_warga','alternatifs.nilai_alternatif']);
+        $warga   = Warga::all();
         $kriteria   = Kriteria::all();
         return view('dashboard.matriks.index', [
             'title' => 'Manage matriks',
             'active' => 'matriks',
-            // 'matriks' => $matriks,
+            'matriks' => $matriks,
             'warga' => $warga,
             'kriteria' => $kriteria,
             'periode' => $periode,

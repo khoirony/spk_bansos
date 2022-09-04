@@ -42,7 +42,6 @@ class AlternatifController extends Controller
             $periode2->save();
         }
         $cariperiode = Periode::where('periode', $periode)->first();
-        // $alternatif = Alternatif::where('id_warga', $id)->where('id_periode', $cariperiode->id)->first();
         $cekalternatif = Alternatif::where('id_warga', $id)->where('id_periode', $cariperiode->id)->count();
         $warga = Warga::where('id', $id)->first();
 
@@ -102,12 +101,9 @@ class AlternatifController extends Controller
             }
         }
 
-
-
-        // $periode = $request->input('periode');
         $this->_hitung($request->input('periode'));
         $warga = Warga::where('id', $id)->first();
-        return redirect('/warga')->with('success', 'Data Alternatif Sukses Ditambakan pada '.$warga->name);
+        return redirect('/warga')->with('success', 'Data Alternatif Sukses Ditambakan pada '.$warga->nama_warga);
     }
 
     private function _hitung($periode)
@@ -154,7 +150,6 @@ class AlternatifController extends Controller
             }
         }
 
-
         ## Mengisi Tabel Normalisasi Terbobot ##
         $kriteria = Kriteria::all();
         foreach ($kriteria as $k){
@@ -184,104 +179,129 @@ class AlternatifController extends Controller
             }
         }
 
+        ## Mengisi Tabel D Positif
+        $kriteriaterbobot   = Kriteria::join('terbobots', 'kriterias.id', '=', 'terbobots.id_kriteria')->where('terbobots.id_periode', $cariperiode->id)->orderBy('id', 'asc')->get(['terbobots.id','terbobots.id_kriteria','terbobots.id_warga','kriterias.nama_kriteria','kriterias.atribut_kriteria','terbobots.nilai_terbobot']);
         
-
-        //Mengisi Tabel PositifNegatif
-        // Positifnegatif::where('periode', $periode)->delete();
-
-        // $positifnegatif = new Positifnegatif;
-        // $positifnegatif->name = 'Positif';
-
-        // $kriteria = kriteria::all();
-        // foreach ($kriteria as $k){
-        //     $kolom = 'c'.$k->id;
-        //     if($k->atribut == 'benefit'){
-        //         $positifnegatif->$kolom = Terbobot::where('periode', $periode)->max('c'.$k->id);
-        //     }else{
-        //         $positifnegatif->$kolom = Terbobot::where('periode', $periode)->min('c'.$k->id);
-        //     }
-        // }
-        // $positifnegatif->periode = $periode;
-        // $positifnegatif->save();
-
-        // $positifnegatif = new Positifnegatif;
-        // $positifnegatif->name = 'Negatif';
-        // foreach ($kriteria as $k){
-        //     $kolom = 'c'.$k->id;
-        //     if($k->atribut == 'benefit'){
-        //         $positifnegatif->$kolom = Terbobot::where('periode', $periode)->min('c'.$k->id);
-        //     }else{
-        //         $positifnegatif->$kolom = Terbobot::where('periode', $periode)->max('c'.$k->id);
-        //     }
-        // }
-        // $positifnegatif->periode = $periode;
-        // $positifnegatif->save();
-
-
-
-        //Mengisi Tabel D Positif
-        // $positif = Positifnegatif::where('name', 'Positif')->where('periode', $periode)->first();
-        $terbobot = Terbobot::where('id_periode', $cariperiode->id)->get();
-        foreach ($terbobot as $t){
-            foreach($t->kriteria as $k){
-                
+        $total = 0;
+        foreach ($kriteriaterbobot as $kt){
+            //mencari solusi ideal positif tiap kriteria
+            if($kt->atribut_kriteria == 'benefit'){
+                $positif = Terbobot::where('id_periode', $cariperiode->id)->where('id_kriteria', $kt->id_kriteria)->max('nilai_terbobot');
+            }else{
+                $positif = Terbobot::where('id_periode', $cariperiode->id)->where('id_kriteria', $kt->id_kriteria)->min('nilai_terbobot');
             }
-        //     $kriteria = kriteria::all();
-        //     $total = 0;
-        //     foreach ($kriteria as $k){
-        //         $kolom = 'c'.$k->id;
-        //         $hasil = 0;
-        //         $hasil = pow($positif->$kolom-$t['c'.$k->id], 2);
-        //         $total += $hasil;
-        //     }
 
-        //     $dpositif = Dpositif::where('id_warga', $t->id_warga)->where('periode', $periode)->first();
-        //     $dpositif->nilai = sqrt($total);
-        //     $dpositif->periode = $t->periode;
-        //     $dpositif->update();
+            //mengurangi solusi ideal positif dengan nilai terbobot dan mempangkat 2 hasilnya
+            $hasil = pow($positif-$kt->nilai_terbobot, 2); 
+            $total += $hasil; 
+
+            //setelah kriteria terakhir maka hasil ditotal untuk dimasukkan ke dpositif
+            $hitungkriteria = Kriteria::count();
+            if($kt->id_kriteria == $hitungkriteria){
+                //cari dpositif ada apa tidak
+                $cekdpositif = Dpositif::where('id_warga', $kt->id_warga)->where('id_periode', $cariperiode->id)->count();
+
+                //cek dpositif untuk tambah/edit dpositif | buka
+                if($cekdpositif == 0){
+                    $dpositif = new dpositif;
+                }else{
+                    $dpositif = dpositif::where('id_warga', $kt->id_warga)->where('id_periode', $cariperiode->id)->first();
+                }
+                
+                //isi dpositif
+                $dpositif->id_warga = $kt->id_warga;
+                $dpositif->id_periode = $cariperiode->id;
+                $dpositif->nilai_dpositif = sqrt($total);
+    
+                //cek dpositif untuk tambah/edit dpositif | tutup
+                if($cekdpositif == 0){
+                    $dpositif->save();
+                }else{
+                    $dpositif->update();
+                }
+                $total = 0;
+            }
+        }
+        
+        ## Mengisi Tabel D Negatif
+        $kriteriaterbobot   = Kriteria::join('terbobots', 'kriterias.id', '=', 'terbobots.id_kriteria')->where('terbobots.id_periode', $cariperiode->id)->orderBy('id', 'asc')->get(['terbobots.id','terbobots.id_kriteria','terbobots.id_warga','kriterias.nama_kriteria','kriterias.atribut_kriteria','terbobots.nilai_terbobot']);
+        $total = 0;
+        foreach ($kriteriaterbobot as $kt){
+            //mencari solusi ideal negatif tiap kriteria
+            if($kt->atribut_kriteria == 'benefit'){
+                $negatif = Terbobot::where('id_periode', $cariperiode->id)->where('id_kriteria', $kt->id_kriteria)->min('nilai_terbobot');
+            }else{
+                $negatif = Terbobot::where('id_periode', $cariperiode->id)->where('id_kriteria', $kt->id_kriteria)->max('nilai_terbobot');
+            }
+
+            //mengurangi solusi ideal negatif dengan nilai terbobot dan mempangkat 2 hasilnya
+            $hasil = pow($kt->nilai_terbobot-$negatif, 2); 
+            $total += $hasil;
+
+            //setelah kriteria terakhir maka hasil ditotal untuk dimasukkan ke dnegatif
+            $hitungkriteria = Kriteria::count();
+            if($kt->id_kriteria == $hitungkriteria){
+                //cari dnegatif ada apa tidak
+                $cekdnegatif = Dnegatif::where('id_warga', $kt->id_warga)->where('id_periode', $cariperiode->id)->count();
+
+                //cek dnegatif untuk tambah/edit dnegatif | buka
+                if($cekdnegatif == 0){
+                    $dnegatif = new Dnegatif;
+                }else{
+                    $dnegatif = Dnegatif::where('id_warga', $kt->id_warga)->where('id_periode', $cariperiode->id)->first();
+                }
+                
+                //isi dnegatif
+                $dnegatif->id_warga = $kt->id_warga;
+                $dnegatif->id_periode = $cariperiode->id;
+                $dnegatif->nilai_dnegatif = sqrt($total);
+    
+                //cek dnegatif untuk tambah/edit dnegatif | tutup
+                if($cekdnegatif == 0){
+                    $dnegatif->save();
+                }else{
+                    $dnegatif->update();
+                }
+                $total = 0;
+            }
         }
 
-        //Mengisi Tabel D Negatif
-        // $negatif = Positifnegatif::where('name', 'Negatif')->where('periode', $periode)->first();
-        // $terbobot = Terbobot::where('periode', $periode)->get();
-        // foreach ($terbobot as $t){
-        //     $kriteria = kriteria::all();
-        //     $total = 0;
-        //     foreach ($kriteria as $k){
-        //         $kolom = 'c'.$k->id;
-        //         $hasil = 0;
-        //         $hasil = pow($t['c'.$k->id]-$negatif->$kolom, 2);
-        //         $total += $hasil;
-        //     }
+        ## Mengisi Tabel Preferensi ##
+        $dnegatif = Dnegatif::where('id_periode', $cariperiode->id)->get();
+        foreach ($dnegatif as $dn){
+            $dpositif = Dpositif::where('id_warga', $dn->id_warga)->where('id_periode', $cariperiode->id)->first();
 
-        //     $dnegatif = Dnegatif::where('id_warga', $t->id_warga)->where('periode', $periode)->first();
-        //     $dnegatif->nilai = sqrt($total);
-        //     $dnegatif->periode = $t->periode;
-        //     $dnegatif->update();
-        // }
+            //cari preferensi ada apa tidak
+            $cekpreferensi = preferensi::where('id_warga', $dn->id_warga)->where('id_periode', $cariperiode->id)->count();
 
-        //Mengisi Tabel Preferensi
-        // $dnegatif = Dnegatif::where('periode', $periode)->get();
+            //cek preferensi untuk tambah/edit preferensi | buka
+            if($cekpreferensi == 0){
+                $preferensi = new preferensi;
+            }else{
+                $preferensi = preferensi::where('id_warga', $dn->id_warga)->where('id_periode', $cariperiode->id)->first();
+            }
+            
+            //isi preferensi
+            $preferensi->id_warga = $dn->id_warga;
+            $preferensi->id_periode = $cariperiode->id;
+            $preferensi->nilai_preferensi = $dn->nilai_dnegatif/($dn->nilai_dnegatif+$dpositif->nilai_dpositif);
 
-        // foreach ($dnegatif as $dn){
-        //     $dpositif = Dpositif::where('id_warga', $dn->id_warga)->where('periode', $periode)->first();
-        //     $preferensi = Preferensi::where('id_warga', $dn->id_warga)->where('periode', $periode)->first();
-        //     if($dn->nilai != null){
-        //         $preferensi->nilai = $dn->nilai/($dn->nilai+$dpositif->nilai);
-        //     }
-        //     $preferensi->periode = $dn->periode;
-        //     $preferensi->update();
-        // }
+            //cek preferensi untuk tambah/edit preferensi | tutup
+            if($cekpreferensi == 0){
+                $preferensi->save();
+            }else{
+                $preferensi->update();
+            }
+        }
 
         //Mengisi Rangking
-        
-        // $preferensi = Preferensi::where('periode', $periode)->orderBy('nilai', 'desc')->get();
-        // $n=1;
-        // foreach ($preferensi as $pre){
-        //     $preferensi = Preferensi::find($pre['id']);
-        //     $preferensi->rangking = $n++;
-        //     $preferensi->update();
-        // }
+        $preferensi = Preferensi::where('id_periode', $cariperiode->id)->orderBy('nilai_preferensi', 'desc')->get();
+        $n=1;
+        foreach ($preferensi as $pre){
+            $preferensi = Preferensi::find($pre['id']);
+            $preferensi->peringkat = $n++;
+            $preferensi->update();
+        }
 
     }
 }
