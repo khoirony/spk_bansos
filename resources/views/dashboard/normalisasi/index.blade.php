@@ -24,10 +24,14 @@
             <td>
               {{ $w->nama_warga }}
             </td>
-              @foreach ($w->normalisasi as $nor)
-              <td>
-                {{ $nor->nilai_normalisasi }}
-              </td>
+              @foreach ($kriteria as $k)
+                @foreach ($normalisasi as $n)
+                  @if($w->id == $n->id_warga && $k->id == $n->id_kriteria)
+                    <td>
+                    {{ $n->nilai_normalisasi }}
+                    </td>
+                  @endif
+                @endforeach
               @endforeach
           </tr>
           @endforeach

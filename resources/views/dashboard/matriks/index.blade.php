@@ -19,23 +19,24 @@
         </thead>
         <tbody>
           @foreach ($warga as $w)
-          {{ $w->matriks }}
           <tr>
             <th scope="row">{{ $no++ }}</th>
             <td>
               {{ $w->nama_warga }}
             </td>
-            
-              {{-- @foreach ($w->matriks as $alt)
-              <td>
-                {{ $alt }}
-              </td>
-              @endforeach --}}
+              @foreach ($kriteria as $k)
+                @foreach ($matriks as $m)
+                  @if($w->id == $m->id_warga && $k->id == $m->id_kriteria)
+                    <td>
+                    {{ $m->nilai_alternatif }}
+                    </td>
+                  @endif
+                @endforeach
+              @endforeach
           </tr>
-          
           @endforeach
         </tbody>
       </table>
 </div>
-{{-- {{ $warga->links() }} --}}
+{{ $warga->links() }}
 @endsection

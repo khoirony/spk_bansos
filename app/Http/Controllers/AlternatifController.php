@@ -19,7 +19,7 @@ class AlternatifController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->search;
-        $warga = warga::where('name', 'like', "%" . $keyword . "%")->paginate(10);
+        $warga = warga::where('nama_warga', 'like', "%" . $keyword . "%")->paginate(10);
         return view('dashboard.warga.index', [
             'title' => 'Hasil Pencarian dari : '.$keyword,
             'active' => 'warga',
@@ -185,6 +185,8 @@ class AlternatifController extends Controller
         $total = 0;
         foreach ($kriteriaterbobot as $kt){
             //mencari solusi ideal positif tiap kriteria
+            $jumlahterbobot = Terbobot::where('id_periode', $cariperiode->id)->where('id_kriteria', $kt->id_kriteria)->count();
+
             if($kt->atribut_kriteria == 'benefit'){
                 $positif = Terbobot::where('id_periode', $cariperiode->id)->where('id_kriteria', $kt->id_kriteria)->max('nilai_terbobot');
             }else{
@@ -284,7 +286,11 @@ class AlternatifController extends Controller
             //isi preferensi
             $preferensi->id_warga = $dn->id_warga;
             $preferensi->id_periode = $cariperiode->id;
-            $preferensi->nilai_preferensi = $dn->nilai_dnegatif/($dn->nilai_dnegatif+$dpositif->nilai_dpositif);
+            if($dn->nilai_dnegatif == 0 && $dpositif->nilai_dpositif == 0){
+                $preferensi->nilai_preferensi = 0;
+            }else{
+                $preferensi->nilai_preferensi = $dn->nilai_dnegatif/($dn->nilai_dnegatif+$dpositif->nilai_dpositif);
+            }
 
             //cek preferensi untuk tambah/edit preferensi | tutup
             if($cekpreferensi == 0){

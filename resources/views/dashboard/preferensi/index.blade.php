@@ -44,14 +44,16 @@
         <td>
           {{ $w->alamat_warga }}
         </td>
-          @foreach ($w->preferensi as $pre)
-          <td>
+        @foreach ($preferensi as $pre)
+          @if($w->id == $pre->id_warga)
+            <td>
             {{ $pre->nilai_preferensi }}
-          </td>
-          <td>
-            {{ $pre->peringkat }}
-          </td>
-          @endforeach
+            </td>
+            <td>
+              {{ $pre->peringkat }}
+              </td>
+          @endif
+        @endforeach
       </tr>
       @endforeach
     </tbody>

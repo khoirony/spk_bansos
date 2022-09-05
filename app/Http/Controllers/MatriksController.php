@@ -18,8 +18,8 @@ class MatriksController extends Controller
         }
 
         $cariperiode = Periode::where('periode', $periode)->first();
-        $matriks = Warga::join('alternatifs', 'wargas.id', '=', 'alternatifs.id_warga')->where('id_periode', $cariperiode->id)->get(['wargas.id','wargas.nama_warga','alternatifs.nilai_alternatif']);
-        $warga   = Warga::all();
+        $warga   = Warga::paginate(10);
+        $matriks = Alternatif::where('id_periode', $cariperiode->id)->get();
         $kriteria   = Kriteria::all();
         return view('dashboard.matriks.index', [
             'title' => 'Manage matriks',

@@ -24,10 +24,14 @@
             <td>
               {{ $w->nama_warga }}
             </td>
-              @foreach ($w->terbobot as $ter)
-              <td>
-                {{ $ter->nilai_terbobot }}
-              </td>
+              @foreach ($kriteria as $k)
+                @foreach ($terbobot as $t)
+                  @if($w->id == $t->id_warga && $k->id == $t->id_kriteria)
+                    <td>
+                    {{ $t->nilai_terbobot }}
+                    </td>
+                  @endif
+                @endforeach
               @endforeach
           </tr>
           @endforeach

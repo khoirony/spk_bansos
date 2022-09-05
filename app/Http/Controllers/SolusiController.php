@@ -18,11 +18,15 @@ class SolusiController extends Controller
         }
 
         $cariperiode = Periode::where('periode', $periode)->first();
+        $dpositif = Dpositif::where('id_periode', $cariperiode->id)->get();
+        $dnegatif = Dnegatif::where('id_periode', $cariperiode->id)->get();
         $warga = Warga::paginate(10);
         return view('dashboard.solusi.index', [
             'title' => 'Solusi Ideal Positif dan Negatif',
             'active' => 'solusi',
             'warga' => $warga,
+            'dpositif' => $dpositif,
+            'dnegatif' => $dnegatif,
             'periode' => $periode,
             'no_dp' => 1,
             'no_dn' => 1

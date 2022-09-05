@@ -28,6 +28,7 @@ class PreferensiController extends Controller
             $preferensi = Preferensi::where('id_periode', $cariperiode->id)->get();
         }
 
+        $preferensi = Preferensi::where('id_periode', $cariperiode->id)->get();
         $warga = Warga::paginate(10);
         return view('dashboard.preferensi.index', [
             'title' => 'Preferensi',

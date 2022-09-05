@@ -25,11 +25,13 @@
               <td>
                 {{ $w->nama_warga }}
               </td>
-                @foreach ($w->dpositif as $alt)
-                <td>
-                  {{ $alt->nilai_dpositif }}
-                </td>
-                @endforeach
+              @foreach ($dpositif as $dp)
+                @if($w->id == $dp->id_warga)
+                  <td>
+                  {{ $dp->nilai_dpositif }}
+                  </td>
+                @endif
+              @endforeach
             </tr>
             @endforeach
           </tbody>
@@ -53,11 +55,13 @@
               <td>
                 {{ $w->nama_warga }}
               </td>
-                @foreach ($w->dnegatif as $alt)
-                <td>
-                  {{ $alt->nilai_dnegatif }}
-                </td>
-                @endforeach
+              @foreach ($dnegatif as $dn)
+                @if($w->id == $dn->id_warga)
+                  <td>
+                  {{ $dn->nilai_dnegatif }}
+                  </td>
+                @endif
+              @endforeach
             </tr>
             @endforeach
           </tbody>
