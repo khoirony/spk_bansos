@@ -18,7 +18,14 @@ class TerbobotController extends Controller
         }
 
         $cariperiode = Periode::where('periode', $periode)->first();
-        $terbobot = Terbobot::where('id_periode', $cariperiode->id)->get();
+
+        if(!$cariperiode){
+            return redirect('/warga')->with('success', 'Data periode ini belum ada harap diisi terlebuh dahulu');
+        }else{
+            $id_periode = $cariperiode->id;
+        }
+
+        $terbobot = Terbobot::where('id_periode', $id_periode)->get();
         $warga = Warga::paginate(10);
         $kriteria   = Kriteria::all();
         return view('dashboard.terbobot.index', [

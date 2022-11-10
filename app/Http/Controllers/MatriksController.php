@@ -21,7 +21,7 @@ class MatriksController extends Controller
         $cariperiode = Periode::where('periode', $periode)->first();
 
         if(!$cariperiode){
-            return redirect('/warga')->with('success', 'Data periode ini belum ada');
+            return redirect('/warga')->with('success', 'Data periode ini belum ada harap diisi terlebuh dahulu');
         }else{
             $id_periode = $cariperiode->id;
         }

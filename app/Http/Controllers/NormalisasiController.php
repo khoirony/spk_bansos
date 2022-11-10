@@ -18,8 +18,15 @@ class NormalisasiController extends Controller
         }
         
         $cariperiode = Periode::where('periode', $periode)->first();
+
+        if(!$cariperiode){
+            return redirect('/warga')->with('success', 'Data periode ini belum ada harap diisi terlebuh dahulu');
+        }else{
+            $id_periode = $cariperiode->id;
+        }
+
         $warga = Warga::paginate(10);
-        $normalisasi = Normalisasi::where('id_periode', $cariperiode->id)->get();
+        $normalisasi = Normalisasi::where('id_periode', $id_periode)->get();
         $kriteria   = Kriteria::all();
         return view('dashboard.normalisasi.index', [
             'title' => 'Normalisasi',
