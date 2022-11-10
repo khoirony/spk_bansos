@@ -58,6 +58,6 @@
       @endforeach
     </tbody>
 </table>
+{{ $warga->links() }}
 </div>
-    
 @endsection

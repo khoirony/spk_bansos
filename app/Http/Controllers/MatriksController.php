@@ -17,9 +17,17 @@ class MatriksController extends Controller
             $periode =  date("Y-m");
         }
 
+
         $cariperiode = Periode::where('periode', $periode)->first();
+
+        if(!$cariperiode){
+            return redirect('/warga')->with('success', 'Data periode ini belum ada');
+        }else{
+            $id_periode = $cariperiode->id;
+        }
+
         $warga   = Warga::paginate(10);
-        $matriks = Alternatif::where('id_periode', $cariperiode->id)->get();
+        $matriks = Alternatif::where('id_periode', $id_periode)->get();
         $kriteria   = Kriteria::all();
         return view('dashboard.matriks.index', [
             'title' => 'Manage matriks',

@@ -17,18 +17,21 @@ class PreferensiController extends Controller
         }
         $cariperiode = Periode::where('periode', $periode)->first();
 
-        if($request->sort == 1){
+        $sort = 0;
+        if(!$request->sort){
             $sort = $request->sort;
+        }
+
+        if($sort == 1){
             $preferensi = Preferensi::where('id_periode', $cariperiode->id)->orderBy('peringkat', 'asc')->get();
-        }else if($request->sort == 2){
-            $sort = $request->sort;
+        }else if($sort == 2){
             $preferensi = Preferensi::where('id_periode', $cariperiode->id)->orderBy('peringkat', 'desc')->get();
-        }else{
-            $sort = 0;
+        }else if($sort == 0){
             $preferensi = Preferensi::where('id_periode', $cariperiode->id)->get();
         }
 
-        $preferensi = Preferensi::where('id_periode', $cariperiode->id)->get();
+        echo "id: ". $sort;
+        // $preferensi = Preferensi::where('id_periode', $cariperiode->id)->get();
         $warga = Warga::paginate(10);
         return view('dashboard.preferensi.index', [
             'title' => 'Preferensi',
