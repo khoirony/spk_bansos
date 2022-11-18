@@ -61,4 +61,17 @@
 <br>
 
 ### Physical Data Model 
-<img src="public/img/pdm.png" alt="pdm" style="width: 600px">
+<img src="public/img/pdm.png" alt="pdm" style="width: 600px"> <br>
+<br>
+
+### Diagram Konteks
+<img src="public/img/diagram-konteks.png" alt="diagram-konteks" style="width: 600px"> <br>
+
+### DFD 1
+<img src="public/img/dfd1.png" alt="dfd1" style="width: 600px"> <br>
+
+### DFD 2.1
+<img src="public/img/dfd2-1.png" alt="dfd2" style="width: 600px"> <br>
+
+### DFD 2.2
+<img src="public/img/dfd2-2.png" alt="dfd2" style="width: 600px"> <br>
