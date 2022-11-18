@@ -1,5 +1,5 @@
 # SISTEM PENDUKUNG KEPUTUSAN PENENTUAN PENERIMA BANTUAN SOSIAL MENGGUNAKAN METODE TOPSIS
-<br><br><br>
+<br>
 ### Tampilan Antar Muka
 1. Halaman Login <br>
 <img src="public/img/login.png" alt="login" style="width: 400px"> <br>
@@ -54,11 +54,11 @@
 
 18.	Halaman Preferensi<br>
 <img src="public/img/preferensi.png" alt="preferensi" style="width: 400px"> <br>
+<br>
 
 ### Conceptual Data Model 
-<br>
 <img src="public/img/cdm.png" alt="cdm" style="width: 600px"> <br>
+<br>
 
 ### Physical Data Model 
-<br>
-<img src="public/img/pdm.png" alt="pdm" style="width: 600px"> <br>
+<img src="public/img/pdm.png" alt="pdm" style="width: 600px">
