@@ -29,9 +29,7 @@ class PreferensiController extends Controller
         }else if($sort == 0){
             $preferensi = Preferensi::where('id_periode', $cariperiode->id)->get();
         }
-
-        echo "id: ". $sort;
-        // $preferensi = Preferensi::where('id_periode', $cariperiode->id)->get();
+        
         $warga = Warga::paginate(10);
         return view('dashboard.preferensi.index', [
             'title' => 'Preferensi',
