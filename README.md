@@ -67,11 +67,11 @@
 ### Diagram Konteks
 <img src="public/img/diagram-konteks.png" alt="diagram-konteks" style="width: 600px"> <br>
 
-### DFD 1
+### DFD Level 1
 <img src="public/img/dfd1.png" alt="dfd1" style="width: 600px"> <br>
 
-### DFD 2.1
+### DFD Detail Perhitungan Metode Topsis 1
 <img src="public/img/dfd2-1.png" alt="dfd2" style="width: 600px"> <br>
 
-### DFD 2.2
+### DFD Detail Perhitungan Metode Topsis 2
 <img src="public/img/dfd2-2.png" alt="dfd2" style="width: 600px"> <br>
